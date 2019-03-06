@@ -38,7 +38,7 @@ import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal
     FormsModule,
     HttpClientModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyC2sYQIcXgK0jbglbKQHc_ImsBieJwohHQ',
+      apiKey: 'YOUR API KEY',
       libraries: ['places']
     })
   ],

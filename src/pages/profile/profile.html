@@ -1,0 +1,110 @@
+<!--
+  Generated template for the ProfilePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+
+  <div padding>
+    <ion-segment  [(ngModel)]="segment" *ngIf='!user.me'>
+      <ion-segment-button value="profile">
+        User's profile
+      </ion-segment-button>
+      <ion-segment-button value="events">
+        User's Events
+      </ion-segment-button>
+    </ion-segment>
+    <ion-segment [(ngModel)]="segment" *ngIf='user.me'>
+      <ion-segment-button value="profile">
+        User's profile
+      </ion-segment-button>
+      <ion-segment-button value="events">
+        User's Events
+      </ion-segment-button>
+      <ion-segment-button value="atendees">
+        My tickets
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [(ngSwitch)]="segment">
+
+    <ion-list *ngSwitchCase="'profile'">
+      <div class="list card">
+        <ion-item class="profile-item">
+          <div class="profile-picture big-profile-picture">
+            <img src="{{user.avatar}}">
+          </div>
+          <h2 class="profile-name dark">{{user.name}}</h2>
+          <div class="profile-info">{{user.email}}</div>
+          <ion-col class="signup-col" *ngIf='user.me'>
+            <button ion-button class="submit-btn" color="secondary" (tap)="this.navCtrl.push('ProfileEditPage', {user: this.user})" full>Edit Profile</button>
+          </ion-col>
+        </ion-item>
+      </div>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'events'">
+      <ion-item-sliding *ngFor="let event of myEvents">
+        <ion-item-options side="left">
+          <button ion-button color="primary" (tap)="spawnDetails(event.creator.id)">
+            <ion-icon name="info"></ion-icon>
+            Profile info
+          </button>
+        </ion-item-options>
+        <ion-item (tap)="spawnDetails(event)">
+          <ion-thumbnail item-start>
+            <img [src]="event.image">
+          </ion-thumbnail>
+          <h2>{{event.title}}</h2>
+          <p>{{event.description}}</p>
+        </ion-item>
+        <ion-item-options side="right" *ngIf='event.mine'>
+          <button ion-button color="danger" (tap)="deleteEvent(event.id)">
+            <ion-icon name="trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'atendees'">
+      <ion-item-sliding *ngFor="let event of atEvents">
+        <ion-item-options side="left">
+          <button ion-button color="primary" (tap)="spawnProfile(event.creator.id)">
+            <ion-icon name="info"></ion-icon>
+            Profile info
+          </button>
+        </ion-item-options>
+        <ion-item (tap)="spawnDetails(event)">
+          <ion-thumbnail item-start>
+            <img [src]="event.image">
+          </ion-thumbnail>
+          <h2>{{event.title}}</h2>
+          <p>{{event.description}}</p>
+        </ion-item>
+        <ion-item-options side="right" *ngIf='event.mine'>
+          <button ion-button color="danger" (tap)="deleteEvent(event.id)">
+            <ion-icon name="trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+
+  <agm-map *ngIf="user && segment=='profile'" [latitude]="user.lat" [longitude]="user.lng" [zoom]="17">
+    <agm-marker [latitude]="user.lat" [longitude]="user.lng"></agm-marker>
+  </agm-map>
+</ion-content>
